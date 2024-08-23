@@ -49,6 +49,7 @@ y = np.array([0, 0, 0, 1])
 # Entrenar el perceptrón
 weights,errors = perceptron_train(X, y, learning_rate=0.1, epochs=10)
 print("Pesos entrenados:", weights)
+print("Errores:", errors)
 
 # Graficar el error global en cada época
 plt.figure(1)

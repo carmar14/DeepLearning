@@ -5,16 +5,30 @@ import matplotlib.pyplot as plt
 #Definir las funciones de activación y entrenamiento
 # Función de activación (escalón)
 def step_function(x):
+    print("entrada al escalon",x)
     return np.where(x >= 0, 1, 0)
 
 # Función para hacer predicciones(output)
 def perceptron_predict(X, weights):
-    return step_function(np.dot(X, weights[1:]) + weights[0])
+    #print("entradas", X)
+    #print("pesos ", weights[0,1:])
+    #print("bias ", weights[0,0])
+    Y=np.array([0,0])
+    for i in range(X.shape[0]):
+        Y[i]=step_function(np.dot(X, weights[i,1:]) + weights[i,0])
+        print("calculo ",np.dot(X, weights[i,1:])+ weights[i,0])
+        print("hola",Y)
+    print("Salida predicha", Y)
+    return Y
 
 # Algoritmo del Perceptrón
-def perceptron_train(X, y, learning_rate=0.1, epochs=10):
+def perceptron_train(X, y, learning_rate=0.1, epochs=10,):
     # Inicializar los pesos (uno más para el bias)
-    weights = np.random.rand(X.shape[1] + 1)#np.zeros(X.shape[1] + 1)
+    weights = np.random.rand(y.shape[1],X.shape[1] + 1)#np.zeros(X.shape[1] + 1)
+    #print(weights)
+    #print("bias ", weights[:,0])
+    #print("pesos ",weights[:, 1:])
+    print("salidas esperadas", y)
     #vector de error
     errors = []
 
@@ -22,15 +36,19 @@ def perceptron_train(X, y, learning_rate=0.1, epochs=10):
     for _ in range(epochs):
         total_error = 0
         for xi, target in zip(X, y):
+            print("target ", target)
+            print("input ", xi)
             # Calcular la salida (predicción)
             output = perceptron_predict(xi,weights)#step_function(np.dot(xi, weights[1:]) + weights[0])
+            print("output", output)
             # Calcular error absoluto
             error = target - output
+            print("Error ", error)
             total_error += abs(error)
             # Actualizar los pesos
-            update = learning_rate * (target - output)
-            weights[1:] += update * xi
-            weights[0] += update
+            update = learning_rate * (target - output) #weights[i,1:]
+            weights[:,1:] += update * xi
+            weights[:,0] += update
         errors.append(total_error)
     return weights,errors
 
@@ -41,10 +59,12 @@ X = np.array([[0, 0],
               [1, 0],
               [1, 1]])
 
-# Salidas esperadas para la compuerta AND
-y = np.array([0, 0, 0, 1],[0,1,1,1])
-# Salidas esperadas para la compuerta OR
-#y = np.array([0, 1, 1, 1])
+# Salidas esperadas para la compuerta AND y OR
+#--------------Y1,Y2
+y = np.array([[0, 0],
+              [0, 1],
+              [0, 1],
+              [1, 1]])
 
 # Entrenar el perceptrón
 weights,errors = perceptron_train(X, y, learning_rate=0.1, epochs=10)
@@ -66,6 +86,7 @@ for xi in X:
     print(f"Entrada: {xi}, Salida predicha: {prediction}")
 
 plt.figure(2)
+'''
 # Graficar los puntos de datos
 for i, xi in enumerate(X):
     if y[i] == 0:
@@ -91,6 +112,6 @@ plt.title('Perceptrón - Compuerta Lógica AND')
 plt.grid(True)
 plt.xlim(-0.1, 1.1)
 plt.ylim(-0.1, 1.1)
-
+'''
 # Mostrar la gráfica
 plt.show()

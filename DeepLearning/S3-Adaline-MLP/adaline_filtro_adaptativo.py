@@ -37,9 +37,9 @@ def adaline_train(X, y, learning_rate, epochs):
 # Preparar los datos de entrada y salida
 # Datos de entrada para el filtro adaptativo
 #señal con ruido
-n_samples = 1000
-t = np.linspace(0,12,n_samples)
-noise = np.random.normal(0, 0.5, n_samples)
+n_samples = 5000
+t = np.linspace(0,22,n_samples)
+noise = np.random.normal(0, 0.4, n_samples) #0.4*np.sin(24*t)
 X = np.sin(t)+noise
 plt.plot(t,X)
 plt.grid()
@@ -61,7 +61,7 @@ d = y[delay:]
 
 
 # Entrenar el perceptrón
-weights,errors = adaline_train(noisy_signal, d, 0.001, 10)
+weights,errors = adaline_train(noisy_signal, d, 0.01, 20)
 print("Pesos entrenados:", weights)
 print("Errores:", errors)
 
@@ -78,7 +78,7 @@ prediction=np.zeros(noisy_signal.shape[0])
 print("tamaño ", prediction.shape)
 i = 0
 for xi in noisy_signal:
-    print("prediccion ", i, " ",adaline_predict(xi, weights))
+    #print("prediccion ", i, " ",adaline_predict(xi, weights))
     prediction[i] = adaline_predict(xi, weights)
     i +=1
 

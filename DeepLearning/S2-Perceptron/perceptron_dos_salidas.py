@@ -9,25 +9,15 @@ def step_function(x):
 
 # Función para hacer predicciones(output)
 def perceptron_predict(X, weights):
-    #print("entradas", X)
-    #print("pesos ", weights[0,1:])
-    #print("bias ", weights[0,0])
     Y=np.array([0,0])
     for i in range(X.shape[0]):
         Y[i]=step_function(np.dot(X, weights[i,1:]) + weights[i,0])
-        #print("calculo ",np.dot(X, weights[i,1:])+ weights[i,0])
-        #print("hola",Y)
-    #print("Salida predicha", Y)
     return Y
 
 # Algoritmo del Perceptrón
-def perceptron_train(X, y, learning_rate=0.1, epochs=10):
+def perceptron_train(X, y, learning_rate=0.1, epochs=20):
     # Inicializar los pesos (uno más para el bias)
     weights = np.random.rand(y.shape[1],X.shape[1] + 1)#np.zeros(X.shape[1] + 1)
-    #print(weights)
-    #print("bias ", weights[:,0])
-    #print("pesos ",weights[:, 1:])
-    #print("salidas esperadas", y)
     #vector de error
     errors = []
 
@@ -35,16 +25,11 @@ def perceptron_train(X, y, learning_rate=0.1, epochs=10):
     for _ in range(epochs):
         total_error = 0
         for xi, target in zip(X, y):
-            #print("target ", target)
-            #print("input ", xi)
             # Calcular la salida (predicción)
             output = perceptron_predict(xi,weights)#step_function(np.dot(xi, weights[1:]) + weights[0])
-            #print("output", output)
             # Calcular error absoluto
             error = target - output
-            #print("Error ", error)
             total_error += sum(abs(error))
-            #print("total_error", sum(total_error))
             # Actualizar los pesos
             update = learning_rate * (target - output) #weights[i,1:]
             weights[:,1:] += update * xi
@@ -67,7 +52,7 @@ y = np.array([[0, 0],
               [1, 1]])
 
 # Entrenar el perceptrón
-weights,errors = perceptron_train(X, y, learning_rate=0.1, epochs=10)
+weights,errors = perceptron_train(X, y, learning_rate=0.1, epochs=20)
 print("Pesos entrenados:", weights)
 print("Salidas:", y[:,0])
 

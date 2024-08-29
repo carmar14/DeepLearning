@@ -38,7 +38,7 @@ def adaline_train(X, y, learning_rate, epochs):
 # Datos de entrada para el filtro adaptativo
 #señal con ruido
 n_samples = 5000
-t = np.linspace(0,12,n_samples)
+t = np.linspace(0,24,n_samples)
 noise = 0.4*np.sin(24*t)#np.random.normal(0, 0.4, n_samples) #0.4*np.sin(24*t)
 X = np.sin(t)+noise
 plt.plot(t,X)
@@ -56,8 +56,23 @@ plt.ylabel("Amplitud de la señal")
 # Crear las entradas y la salida para ADALINE
 delay = 15
 noisy_signal = np.array([X[i:i+delay] for i in range(n_samples-delay)])
-print(noisy_signal.shape)
+print("tamaño de entradas",noisy_signal.shape)
+print("tamaño",len(noisy_signal))
+print("tamaño del tiempo",len(noisy_signal)-1)
 d = y[delay:]
+
+# Graficar las subsecuencias
+
+plt.figure(figsize=(12, 8))
+for i in range(noisy_signal.shape[1]):
+    plt.plot(t[delay:],noisy_signal[:,i], label=f"Subsecuencia {i+1}")
+
+
+plt.title(f"Señales Generadas con delay={delay}")
+plt.xlabel("Muestras")
+plt.ylabel("Amplitud")
+plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1.0), ncol=1, fontsize='small')
+
 
 
 # Entrenar el perceptrón

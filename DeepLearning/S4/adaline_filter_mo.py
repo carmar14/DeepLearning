@@ -1,0 +1,117 @@
+#importar librerias
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Definir las funciones de activación y entrenamiento
+# Función de activación (escalón)
+def linear_function(x):
+    return x
+
+# Función para hacer predicciones(output)
+def adaline_predict(X, weights):
+    Y = np.array([0, 0, 0])
+    #print("tamñooo", y.shape[1])
+    for i in range(y.shape[1]):
+        Y[i] = linear_function(np.dot(X, weights[i, 1:]) + weights[i, 0])
+    return Y
+
+# Algoritmo del Perceptrón
+def adaline_train(X, y, learning_rate, epochs):
+    # Inicializar los pesos (uno más para el bias)
+    weights = np.random.rand(y.shape[1],X.shape[1] + 1)
+    #print("pesos", weights.shape)
+    #vector de error
+    errors = []
+
+    # Entrenamiento
+    for _ in range(epochs):
+        total_error = 0
+        for xi, target in zip(X, y):
+            # Calcular la salida (predicción)
+            output = adaline_predict(xi,weights)#step_function(np.dot(xi, weights[1:]) + weights[0])
+            # Calcular error absoluto
+            error = (target - output)**2
+            total_error += sum(error)
+            # Actualizar los pesos
+            update = 2*learning_rate * (target - output)
+            #print("Actualizacion de pesos",update.shape)
+            #print("entrada", xi.shape[0])
+            #print("error", update.shape)
+            weights[:,1:] += update.reshape(3,1) * xi.reshape(1,xi.shape[0])
+            weights[:,0] += update
+        errors.append(total_error)
+    return weights,errors
+
+# Preparar los datos de entrada y salida
+# Datos de entrada para el filtro adaptativo
+#señal con ruido
+n_samples = 5000
+t = np.linspace(0,24,n_samples)
+A1 = 0.4
+A2 = 0.2
+A3 = 0.8
+w1 = 10
+w2 = 2
+w3 = 5
+x1 = A1*np.sin(w1*t)
+x2 = A2*np.sin(w2*t)
+x3 = A3*np.sin(w3*t)
+X = x1+x2+x3
+plt.plot(t,X)
+plt.grid()
+
+
+# Salida esperada: señal sin ruido
+y1 = x1
+y2 = x2
+y3 = x3
+y= np.array([y1,y2,y3]).T
+print("tamaño de la salida", y.shape)
+
+
+
+# Crear las entradas y la salida para ADALINE
+delay = 15
+noisy_signal = np.array([X[i:i+delay] for i in range(n_samples-delay)])
+print("tamaño de entradas",noisy_signal.shape)
+print("tamaño",len(noisy_signal))
+print("tamaño del tiempo",len(noisy_signal)-1)
+d = y[delay:,:]
+print("tamaño de la salida deseada", d.shape)
+
+
+# Entrenar el perceptrón
+weights,errors = adaline_train(noisy_signal, d, 0.01, 200)
+print("Pesos entrenados:", weights)
+print("Errores:", errors)
+
+# Graficar el error global en cada época
+plt.figure()
+plt.plot(range(1, len(errors) + 1), errors, marker='o')
+plt.xlabel('Época')
+plt.ylabel('Error Global')
+plt.title('Error Global del Perceptrón en cada Época')
+plt.grid(True)
+'''
+#señal filtrada
+prediction=np.zeros(noisy_signal.shape[0])
+print("tamaño ", prediction.shape)
+i = 0
+for xi in noisy_signal:
+    #print("prediccion ", i, " ",adaline_predict(xi, weights))
+    prediction[i] = adaline_predict(xi, weights)
+    i +=1
+
+print("tamaños y ", prediction.shape)
+# Mostrar la gráfica
+plt.figure()
+plt.grid(True)
+plt.plot(t,X,'b')
+plt.plot(t,y,'--r')
+plt.plot(t[delay:],prediction,'-.k')
+plt.legend(["Entrada con ruido","Salida sin ruido",'Salidad filtrada por la red'])
+plt.xlabel("Tiempo(s)")
+plt.ylabel("Amplitud de la señal")
+'''
+plt.show()
+

@@ -46,7 +46,7 @@ def adaline_train(X, y, learning_rate, epochs):
 # Datos de entrada para el filtro adaptativo
 #señal con ruido
 n_samples = 5000
-t = np.linspace(0,24,n_samples)
+t = np.linspace(0,12,n_samples)
 A1 = 0.4
 A2 = 0.2
 A3 = 0.8

@@ -12,7 +12,7 @@ def adaline_predict(X, weights):
     Y = np.array([0, 0, 0])
     #print("tamñooo", y.shape[1])
     for i in range(y.shape[1]):
-        Y[i] = linear_function(np.dot(X, weights[i, 1:]) + 0*weights[i, 0])
+        Y[i] = linear_function(np.dot(X, weights[i, 1:]) + 1*weights[i, 0])
     return Y
 
 # Algoritmo del Perceptrón
@@ -57,6 +57,9 @@ x1 = A1*np.sin(w1*t)
 x2 = A2*np.sin(w2*t)
 x3 = A3*np.sin(w3*t)
 X = x1+x2+x3
+#normalizacion
+X = 2*(X-min(X))/(max(X)-min(X))-1
+
 plt.plot(t,X)
 plt.grid()
 
@@ -65,13 +68,18 @@ plt.grid()
 y1 = x1
 y2 = x2
 y3 = x3
+
+#salidas normalizadas
+y1 = 2*(y1-min(y1))/(max(y1)-min(y1))-1
+y3 = 2*(y2-min(y2))/(max(y2)-min(y2))-1
+y3 = 2*(y3-min(y3))/(max(y3)-min(y3))-1
 y= np.array([y1,y2,y3]).T
 print("tamaño de la salida", y.shape)
 
 
 
 # Crear las entradas y la salida para ADALINE
-delay = 15
+delay = 35
 noisy_signal = np.array([X[i:i+delay] for i in range(n_samples-delay)])
 print("tamaño de entradas",noisy_signal.shape)
 print("tamaño",len(noisy_signal))
@@ -92,26 +100,45 @@ plt.xlabel('Época')
 plt.ylabel('Error Global')
 plt.title('Error Global del Perceptrón en cada Época')
 plt.grid(True)
-'''
+
 #señal filtrada
-prediction=np.zeros(noisy_signal.shape[0])
+prediction=np.zeros((noisy_signal.shape[0],d.shape[1]))
 print("tamaño ", prediction.shape)
 i = 0
 for xi in noisy_signal:
     #print("prediccion ", i, " ",adaline_predict(xi, weights))
-    prediction[i] = adaline_predict(xi, weights)
+    prediction[i,:] = adaline_predict(xi, weights)
     i +=1
 
 print("tamaños y ", prediction.shape)
 # Mostrar la gráfica
 plt.figure()
-plt.grid(True)
+plt.subplot(3,1,1)
 plt.plot(t,X,'b')
-plt.plot(t,y,'--r')
-plt.plot(t[delay:],prediction,'-.k')
-plt.legend(["Entrada con ruido","Salida sin ruido",'Salidad filtrada por la red'])
+plt.plot(t,x1,'--r')
+plt.plot(t[delay:],prediction[:,0],'-.k')
+plt.legend(["Entrada con ruido","Salida deseada sin ruido",'Salidad filtrada por la red'])
 plt.xlabel("Tiempo(s)")
 plt.ylabel("Amplitud de la señal")
-'''
+plt.grid(True)
+
+plt.subplot(3,1,2)
+plt.plot(t,X,'b')
+plt.plot(t,x2,'--r')
+plt.plot(t[delay:],prediction[:,1],'-.k')
+plt.legend(["Entrada con ruido","Salida deseada sin ruido",'Salidad filtrada por la red'])
+plt.xlabel("Tiempo(s)")
+plt.ylabel("Amplitud de la señal")
+plt.grid(True)
+
+plt.subplot(3,1,3)
+plt.plot(t,X,'b')
+plt.plot(t,x3,'--r')
+plt.plot(t[delay:],prediction[:,2],'-.k')
+plt.legend(["Entrada con ruido","Salida deseada sin ruido",'Salidad filtrada por la red'])
+plt.xlabel("Tiempo(s)")
+plt.ylabel("Amplitud de la señal")
+plt.grid(True)
+
 plt.show()
 

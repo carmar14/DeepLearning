@@ -11,7 +11,7 @@ def linear_function(x):
 def adaline_predict(X, weights):
     return linear_function(np.dot(X, weights[1:]) + 0*weights[0])
 
-# Algoritmo del Perceptrón
+# Algoritmo del Adaline
 def adaline_train(X, y, learning_rate, epochs):
     # Inicializar los pesos (uno más para el bias)
     weights = np.random.rand(X.shape[1] + 1)
@@ -23,7 +23,7 @@ def adaline_train(X, y, learning_rate, epochs):
         total_error = 0
         for xi, target in zip(X, y):
             # Calcular la salida (predicción)
-            output = adaline_predict(xi,weights)#step_function(np.dot(xi, weights[1:]) + weights[0])
+            output = adaline_predict(xi,weights)
             # Calcular error absoluto
             error = (target - output)**2
             total_error += abs(error)
@@ -75,7 +75,7 @@ plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1.0), ncol=1, fontsize='smal
 
 
 
-# Entrenar el perceptrón
+# Entrenar el adalin
 weights,errors = adaline_train(noisy_signal, d, 0.01, 200)
 print("Pesos entrenados:", weights)
 print("Errores:", errors)

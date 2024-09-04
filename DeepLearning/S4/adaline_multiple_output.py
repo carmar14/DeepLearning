@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 class AdalineMultiOutput:
-    def __init__(self, input_size, output_size, learning_rate=0.001, epochs=1000):
+    def __init__(self, input_size, output_size, learning_rate=0.001, epochs=500):
         """
         Inicializa la red ADALINE con múltiples salidas.
 
@@ -44,8 +44,8 @@ class AdalineMultiOutput:
                 x_i = np.insert(X[i], 0, 1)  # Insertar el término de bias
                 y = np.dot(self.weights, x_i)  # Predicción actual
                 error = D[i] - y  # Error de predicción
-                print("Error:", error.shape)
-                print("entradas ", x_i.shape)
+                #print("Error:", error.shape)
+                #print("entradas ", x_i.shape)
                 # Actualizar los pesos para cada salida
                 self.weights += self.learning_rate * np.outer(error, x_i)
 
@@ -96,7 +96,7 @@ d3 = signal3[delay:]
 D = np.stack((d1, d2, d3), axis=1)  # Matriz de salidas deseadas (n_samples - delay, 3)
 
 # Crear y entrenar la red ADALINE multisalida
-adaline = AdalineMultiOutput(input_size=delay, output_size=3, learning_rate=0.001, epochs=1000)
+adaline = AdalineMultiOutput(input_size=delay, output_size=3, learning_rate=0.001, epochs=500)
 adaline.train(X, D)
 
 # Recuperar las señales utilizando la red ADALINE entrenada

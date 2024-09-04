@@ -32,13 +32,13 @@ def adaline_train(X, y, learning_rate, epochs):
             # Calcular error absoluto
             error = (target - output)**2
             total_error += sum(error)
-            print("error ", target - output)
+            #print("error ", target - output)
             # Actualizar los pesos
             update = 2*learning_rate * (target - output)/len(noisy_signal)
-            print("Actualizacion de pesos",update.shape)
+            #print("Actualizacion de pesos",update.shape)
             #print("entrada", xi.shape[0])
             #print("error", update.shape)
-            weights[:,1:] += update.reshape(3,1) * xi.reshape(1,xi.shape[0])
+            weights[:,1:] += np.outer(update,xi)#update.reshape(3,1) * xi.reshape(1,xi.shape[0])
             weights[:,0] += update
         errors.append(total_error)
     return weights,errors
@@ -91,7 +91,7 @@ print("tamaño de la salida deseada", d.shape)
 
 
 # Entrenar el perceptrón
-weights,errors = adaline_train(noisy_signal, d, 0.001, 1000)
+weights,errors = adaline_train(noisy_signal, d, 0.001, 500)
 print("Pesos entrenados:", weights)
 print("Errores:", errors)
 

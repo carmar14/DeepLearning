@@ -11,7 +11,8 @@ def train(X, y, epochs=10000, lr=0.1):
     np.random.seed(1)
     weights = np.random.rand(X.shape[1], y.shape[1])
     bias = np.random.rand(1, y.shape[1])
-
+    # vector de error
+    errors = []
     for epoch in range(epochs):
         # Calcular la salida
         output = step_function(np.dot(X, weights) + bias)
@@ -58,7 +59,7 @@ alphabet = {
 
 # Convertir las letras en su representación binaria
 X = np.array(list(alphabet.values()))
-
+print(X)
 # Crear las salidas esperadas (codificación binaria de A a Z)
 y = np.array([
     [0, 0, 0, 0, 0],  # A

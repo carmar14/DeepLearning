@@ -87,7 +87,7 @@ composite_signal = signal1 + signal2 + signal3
 noisy_composite_signal = composite_signal #+ noise
 
 # Configuración de ADALINE
-delay = 100  # Número de retrasos (taps) para la entrada
+delay = 15  # Número de retrasos (taps) para la entrada
 X = np.array([noisy_composite_signal[i:i + delay] for i in range(n_samples - delay)])
 # Señales originales retrasadas para alinear con X
 d1 = signal1[delay:]

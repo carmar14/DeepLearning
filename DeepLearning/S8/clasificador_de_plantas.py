@@ -10,8 +10,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras import datasets
-from tensorflow.keras.utils import to_categorical
+#from tensorflow.keras import datasets
+#from tensorflow.keras.utils import to_categorical
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 #from sklearn.metrics import plot_confusion_matrix
@@ -49,13 +49,14 @@ plt.legend(title='Especies')
 
 # Mostrar la gráfica
 plt.grid()
-plt.show()
+#plt.show()
 
 class_names = iris.target_names
 labels, counts = np.unique(y, return_counts=True)
+plt.figure()
 plt.bar(labels, counts, align='center')
 plt.gca().set_xticks(labels)
-plt.show()
+#plt.show()
 
 from mpl_toolkits.mplot3d import Axes3D
 # Configurar la paleta de colores
@@ -80,7 +81,7 @@ ax.set_zlabel('Longitud del pétalo (cm)')
 ax.legend(title='Especies')
 
 # Mostrar la gráfica
-plt.show()
+#plt.show()
 
 print("Las caracteristicas: \n", X)
 print("Las estiquetas son : \n", y)
@@ -118,7 +119,7 @@ history = model.fit(X_train, y_train, validation_split=0.3, batch_size=55, epoch
 # list all data in history
 print(history.history.keys())
 # summarize history for accuracy
-
+plt.figure()
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.title('model accuracy')
@@ -126,8 +127,9 @@ plt.ylabel('accuracy')
 plt.xlabel('epoch')
 #plt.legend(['train'], loc='upper left')
 plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+#plt.show()
 # summarize history for loss
+plt.figure()
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
 plt.title('model loss')
@@ -135,7 +137,7 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 #plt.legend(['train'], loc='upper left')
 plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+#plt.show()
 
 # Evaluate the model with test data
 loss, accuracy = model.evaluate(X_test, y_test, verbose=0)

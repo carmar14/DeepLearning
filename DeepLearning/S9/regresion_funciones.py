@@ -68,7 +68,7 @@ plt.show()
 # Visualizar la superficie de la función y la superficie predicha
 fig = plt.figure(figsize=(12, 6))
 # Crear un meshgrid para graficar las superficies
-x1_range = np.linspace(0, 10, 100)
+x1_range = np.linspace(-10, 10, 100)
 x2_range = np.linspace(1, 10, 100)
 X1_mesh, X2_mesh = np.meshgrid(x1_range, x2_range)
 y_real_surface = func(X1_mesh, X2_mesh)

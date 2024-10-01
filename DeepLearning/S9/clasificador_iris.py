@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from tensorflow.keras.regularizers import l1, l2
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
@@ -28,58 +29,8 @@ df['species'] = iris.target
 # Mapeo de especies a nombres
 df['species'] = df['species'].map({0: 'Setosa', 1: 'Versicolor', 2: 'Virginica'})
 
-# Configurar la paleta de colores
-palette = {'Setosa': 'red', 'Versicolor': 'green', 'Virginica': 'blue'}
 
-# Crear la figura y los ejes
-plt.figure(figsize=(10, 6))
 
-# Graficar las características
-sns.scatterplot(data=df, x='sepal length (cm)', y='sepal width (cm)', hue='species', palette=palette, s=100)
-
-# Agregar título y etiquetas
-plt.title('Características del Iris')
-plt.xlabel('Longitud del sépalo (cm)')
-plt.ylabel('Anchura del sépalo (cm)')
-
-# Mostrar leyenda
-plt.legend(title='Especies')
-
-# Mostrar la gráfica
-plt.grid()
-#plt.show()
-
-class_names = iris.target_names
-labels, counts = np.unique(y, return_counts=True)
-plt.figure()
-plt.bar(labels, counts, align='center')
-plt.gca().set_xticks(labels)
-#plt.show()
-
-from mpl_toolkits.mplot3d import Axes3D
-# Configurar la paleta de colores
-colors = {'Setosa': 'red', 'Versicolor': 'green', 'Virginica': 'blue'}
-# Crear la figura y los ejes 3D
-fig = plt.figure(figsize=(12, 8))
-ax = fig.add_subplot(111, projection='3d')
-
-# Graficar las características en 3D
-for species in colors.keys():
-    subset = df[df['species'] == species]
-    ax.scatter(subset.iloc[:, 0], subset.iloc[:, 1], subset.iloc[:, 2],
-               color=colors[species], label=species, s=100)
-
-# Agregar etiquetas y título
-ax.set_title('Características del Iris en 3D')
-ax.set_xlabel('Longitud del sépalo (cm)')
-ax.set_ylabel('Anchura del sépalo (cm)')
-ax.set_zlabel('Longitud del pétalo (cm)')
-
-# Mostrar leyenda
-ax.legend(title='Especies')
-
-# Mostrar la gráfica
-#plt.show()
 
 print("Las caracteristicas: \n", X)
 print("Las estiquetas son : \n", y)
@@ -97,29 +48,51 @@ print("Datos one hot encoding \n :", y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
 
 # Definir el modelo secuencial
+# Crear el modelo con regularización L1 y L2
 # Crear el modelo
 model = tf.keras.Sequential()
 #Define a model
 
 # Capa de entrada y capa oculta (se ajusta a la cantidad de características de entrada)
-model.add(tf.keras.layers.Dense(units=64, input_dim=X.shape[1], activation='tanh'))  # Capa oculta con 'tanh'
-model.add(tf.keras.layers.Dense(units=32, activation='tanh'))  # Capa oculta con 'tanh'
+model.add(tf.keras.layers.Dense(units=64, input_dim=X.shape[1], activation='tanh', kernel_regularizer=l1(0.01)))  # Capa oculta con 'tanh', # Regularización L1
+model.add(tf.keras.layers.Dense(units=32, activation='tanh', kernel_regularizer=l2(0.01)))  # Capa oculta con 'tanh', # Regularización L2
 # Capa de salida para 3 clases con 'softmax' para clasificación multiclase
 model.add(tf.keras.layers.Dense(units=3, activation='softmax'))
+
+#regularizacion por parada temprana
+# Definir el callback de Early Stopping
+early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',  # Monitorea la métrica val_loss
+                               patience=6,         # Paciencia de 3 épocas sin mejora
+                               mode='min',         # Queremos minimizar val_loss
+                               restore_best_weights=True)  # Restaura los mejores pesos
+'''
+monitor: Especifica qué métrica se quiere monitorizar (por ejemplo, val_loss, val_accuracy).
+patience: Número de épocas que el modelo puede continuar entrenando sin mejorar antes de que se detenga.
+mode: Puede ser 'min', 'max' o 'auto', dependiendo de si se está minimizando o maximizando la métrica. Por ejemplo, para val_loss se utiliza 'min' porque queremos minimizarla.
+restore_best_weights: Si se establece como True, restaura los pesos del modelo a la mejor época antes de que comenzara a empeorar.
+'''
 
 #Compile and train the model
 model.compile(optimizer='rmsprop',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
-history = model.fit(X_train, y_train, validation_split=0.3, batch_size=15, epochs=100)
+              #metrics=[tf.keras.metrics.Recall()]) #metricas: https://keras.io/api/metrics/
+
+history = model.fit(X_train, y_train,
+                    validation_split=0.3,
+                    batch_size=55,
+                    epochs=100,
+                    #callbacks=[early_stopping],  # Aplicar Early Stopping
+                    validation_freq=1) #https://keras.io/api/models/model_training_apis/
 #history = model.fit(X_train, y_train, batch_size=5, epochs=100)
 
 # list all data in history
 print(history.history.keys())
+epochs = range(1, len(history.history['accuracy']) + 1)
 # summarize history for accuracy
 plt.figure()
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
+plt.plot(epochs,history.history['accuracy'])
+plt.plot(epochs,history.history['val_accuracy']) # epochs[1::validation_freq]
 plt.title('model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
@@ -128,8 +101,8 @@ plt.legend(['train', 'test'], loc='upper left')
 #plt.show()
 # summarize history for loss
 plt.figure()
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
+plt.plot(epochs, history.history['loss'])
+plt.plot(epochs, history.history['val_loss'])
 plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
@@ -188,6 +161,27 @@ print(f'Recall (Macro): {recall_macro:.2f}')
 print(f'F1-Score (Macro): {f1_macro:.2f}')
 print(f'Exactitud (Accuracy): {accuracy:.2f}')
 print(f'AUC (OvR): {auc:.2f}')
+
+# Calcular métricas clase por clase
+for i in range(n_classes):
+    print(f"\nMétricas para la clase {i}:")
+
+    # Convertir la clase actual en un problema binario (One vs Rest)
+    y_true_binary = (y_true == i).astype(int)  # 1 para la clase actual, 0 para el resto
+    y_pred_binary = (predicted == i).astype(int)  # Predicciones convertidas a binario
+
+    # Calcular precisión, recall, f1-score y accuracy para la clase actual
+    precision = precision_score(y_true_binary, y_pred_binary)
+    recall = recall_score(y_true_binary, y_pred_binary)
+    f1 = f1_score(y_true_binary, y_pred_binary)
+    accuracy = accuracy_score(y_true_binary, y_pred_binary)
+
+    # Mostrar las métricas
+    print(f'Precisión: {precision:.2f}')
+    print(f'Recall: {recall:.2f}')
+    print(f'F1-Score: {f1:.2f}')
+    print(f'Exactitud (Accuracy): {accuracy:.2f}')
+    print(f'AUC: {auc:.2f}')
 
 # Calcular ROC curve para cada clase
 fpr = dict()

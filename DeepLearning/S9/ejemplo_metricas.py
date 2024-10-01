@@ -12,6 +12,7 @@ n_classes = 3
 print("valores reales", y_true)
 # Binarizar las etiquetas para ROC AUC
 y_true_bin = label_binarize(y_true, classes=[0, 1, 2])
+print("binarizado ", y_true_bin)
 y_pred_prob = np.array([[0.9, 0.05, 0.05],  # Probabilidades para cada clase (ejemplo)
                         [0.1, 0.2, 0.7],
                         [0.2, 0.6, 0.2],

@@ -54,8 +54,8 @@ model = tf.keras.Sequential()
 #Define a model
 
 # Capa de entrada y capa oculta (se ajusta a la cantidad de características de entrada)
-model.add(tf.keras.layers.Dense(units=64, input_dim=X.shape[1], activation='tanh', kernel_regularizer=l1(0.01)))  # Capa oculta con 'tanh', # Regularización L1
-model.add(tf.keras.layers.Dense(units=32, activation='tanh', kernel_regularizer=l2(0.01)))  # Capa oculta con 'tanh', # Regularización L2
+model.add(tf.keras.layers.Dense(units=32, input_dim=X.shape[1], activation='tanh', kernel_regularizer=l2(0.01)))  # Capa oculta con 'tanh', # Regularización L1
+model.add(tf.keras.layers.Dense(units=16, activation='tanh', kernel_regularizer=l2(0.01)))  # Capa oculta con 'tanh', # Regularización L2
 # Capa de salida para 3 clases con 'softmax' para clasificación multiclase
 model.add(tf.keras.layers.Dense(units=3, activation='softmax'))
 
@@ -80,7 +80,7 @@ model.compile(optimizer='rmsprop',
 
 history = model.fit(X_train, y_train,
                     validation_split=0.3,
-                    batch_size=55,
+                    batch_size=15,
                     epochs=100,
                     #callbacks=[early_stopping],  # Aplicar Early Stopping
                     validation_freq=1) #https://keras.io/api/models/model_training_apis/

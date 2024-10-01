@@ -22,7 +22,7 @@ X_test = scaler.transform(X_test)
 
 # Crear el modelo de red neuronal multicapa (MLP) para regresión
 model = Sequential([
-    Dense(64, activation='relu', input_shape=(X_train.shape[1],)),  # Capa oculta con 64 neuronas
+    Dense(64, activation='tanh', input_shape=(X_train.shape[1],)),  # Capa oculta con 64 neuronas
     Dense(64, activation='relu'),  # Otra capa oculta con 64 neuronas
     Dense(1)  # Capa de salida para regresión (1 valor continuo)
 ])

@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from sklearn.metrics import mean_absolute_percentage_error
 
 # Función que vamos a intentar aprender
 def func(x1, x2):
@@ -12,7 +13,7 @@ def func(x1, x2):
 # Generar un dataset con valores de x1 y x2
 np.random.seed(42)
 X1 = np.random.uniform(0, 10, 1000)  # Variable x1 entre 0 y 10
-X2 = np.random.uniform(1, 10, 1000)  # Variable x2 entre 1 y 10 (evitamos log(0))
+X2 = np.random.uniform(0, 10, 1000)  # Variable x2 entre 0 y 10
 y = func(X1, X2)  # Valores reales de la función
 
 # Crear el dataset con las variables X1 y X2
@@ -42,6 +43,18 @@ history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data
 # Realizar predicciones en el conjunto de prueba
 y_pred = model.predict(X_test)
 
+# Evaluar el modelo en el conjunto de prueba
+test_loss = model.evaluate(X_test, y_test, verbose=0)
+print(f"Pérdida en el conjunto de prueba (MSE): {test_loss:.2f}")
+
+# Calcular el RMSE (Raíz del Error Cuadrático Medio)
+rmse = np.sqrt(test_loss)
+print(f"Raíz del error cuadrático medio (RMSE): {rmse:.2f}")
+
+# Calcular MAPE
+mape = mean_absolute_percentage_error(y_test, y_pred)
+print(f"Mean Absolute Percentage Error (MAPE): {mape * 100:.2f}%")
+
 # Graficar los valores reales y predichos para la función
 plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred, color='red', alpha=0.6, label='Valores Predichos')
@@ -54,7 +67,6 @@ plt.show()
 
 # Visualizar la superficie de la función y la superficie predicha
 fig = plt.figure(figsize=(12, 6))
-
 # Crear un meshgrid para graficar las superficies
 x1_range = np.linspace(0, 10, 100)
 x2_range = np.linspace(1, 10, 100)
@@ -84,3 +96,6 @@ ax2.set_zlabel('f_pred(x1, x2)')
 
 plt.tight_layout()
 plt.show()
+
+
+

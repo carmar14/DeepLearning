@@ -87,6 +87,7 @@ X2_flat = X2_mesh.flatten()
 X_mesh_scaled = scaler.transform(np.column_stack((X1_flat, X2_flat)))
 y_pred_surface = model.predict(X_mesh_scaled).reshape(X1_mesh.shape)
 
+ax.scatter(X1_mesh, X2_mesh, y_pred_surface, 'ro')
 ax2 = fig.add_subplot(122, projection='3d')
 ax2.plot_surface(X1_mesh, X2_mesh, y_pred_surface, cmap='plasma')
 ax2.set_title('Superficie de la Función Predicha')

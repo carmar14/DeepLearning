@@ -15,7 +15,7 @@ from tensorflow.keras import layers, models
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 
-1# Cargar el dataset Flowers 102 de TensorFlow Datasets
+# Cargar el dataset Flowers 102 de TensorFlow Datasets
 dataset, info = tfds.load('oxford_flowers102', with_info=True, as_supervised=True)
 
 # División en conjunto de entrenamiento y prueba

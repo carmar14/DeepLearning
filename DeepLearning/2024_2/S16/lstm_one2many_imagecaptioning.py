@@ -1,3 +1,5 @@
+#https://www.youtube.com/watch?v=fUSTbGrL1tc&list=PLCJHEFznK8ZybO3cpfWf4gKbyS5VZgppW&index=2
+
 import os
 import numpy as np
 import wget

@@ -5,17 +5,19 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # Definir la función f(x, y)
 def f(x, y):
-    return np.sin(x) * np.cos(y) + (x**2 + y**2) / 10
+    return np.exp(-(1/8)*(x**2+y**2))*(np.power(np.sin(x),2) + np.power(np.cos(y),2))#np.sin(x) * np.cos(y) + (x**2 + y**2) / 10
 
 # Gradiente de f(x, y)
 def grad_f(x, y):
-    df_dx = np.cos(x) * np.cos(y) + (2*x) / 10
-    df_dy = -np.sin(x) * np.sin(y) + (2*y) / 10
+    ft = np.power(np.sin(x), 2) + np.power(np.cos(y), 2)
+    fe = np.exp(-(1/8)*(x**2+y**2))
+    df_dx = ft*fe*(-2*x)+fe*(2*np.sin(x))#np.cos(x) * np.cos(y) + (2*x) / 10
+    df_dy = ft*fe*(-2*y)+fe*(-2*np.cos(x))#-np.sin(x) * np.sin(y) + (2*y) / 10
     return np.array([df_dx, df_dy])
 
 # Crear una malla de valores para graficar la superficie
-x_vals = np.linspace(-3, 3, 50)
-y_vals = np.linspace(-3, 3, 50)
+x_vals = np.linspace(-5, 5, 500)
+y_vals = np.linspace(-5, 5, 500)
 X, Y = np.meshgrid(x_vals, y_vals)
 Z = f(X, Y)
 
@@ -90,8 +92,15 @@ def update(frame):
 
     return point_min, point_max, path_min, path_max
 
+
 # **Crear la animación**
-ani = animation.FuncAnimation(fig, update, frames=max(len(x_traj_min), len(x_traj_max)), interval=200, blit=False)
+ani = animation.FuncAnimation(fig, update, frames=max(len(x_traj_min), len(x_traj_max)), interval=2, blit=False)
+
+# **Guardar la animación como GIF**
+gif_filename = "gradiente_3d.gif"
+ani.save(gif_filename, writer="pillow", fps=10)
+
+print(f"Animación guardada como {gif_filename}")
 
 # **Mostrar la animación**
 plt.show()

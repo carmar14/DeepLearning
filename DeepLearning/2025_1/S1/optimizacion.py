@@ -82,7 +82,14 @@ def update(frame):
 
 
 # Crear la animación (blit=False para PyCharm)
-ani = animation.FuncAnimation(fig, update, frames=max(len(x_vals_min), len(x_vals_max)), interval=200, blit=False)
+ani = animation.FuncAnimation(fig, update, frames=max(len(x_vals_min), len(x_vals_max)), interval=2, blit=False)
+
+
+# **Guardar la animación como GIF**
+gif_filename = "gradiente_2d.gif"
+ani.save(gif_filename, writer="pillow", fps=10)
+
+print(f"Animación guardada como {gif_filename}")
 
 # Mostrar la animación
 plt.show()

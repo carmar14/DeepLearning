@@ -1,23 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from mpl_toolkits.mplot3d import Axes3D
 
 # Definir la función f(x, y)
 def f(x, y):
-    return np.exp(-(1/8)*(x**2+y**2))*(np.power(np.sin(x),2) + np.power(np.cos(y),2))#np.sin(x) * np.cos(y) + (x**2 + y**2) / 10
+    return np.sin(x) * np.cos(y) + (x**2 + y**2) / 10
 
 # Gradiente de f(x, y)
 def grad_f(x, y):
-    ft = np.power(np.sin(x), 2) + np.power(np.cos(y), 2)
-    fe = np.exp(-(1/8)*(x**2+y**2))
-    df_dx = ft*fe*(-2*x)+fe*(2*np.sin(x))#np.cos(x) * np.cos(y) + (2*x) / 10
-    df_dy = ft*fe*(-2*y)+fe*(-2*np.cos(x))#-np.sin(x) * np.sin(y) + (2*y) / 10
+    df_dx = np.cos(x) * np.cos(y) + (2*x) / 10
+    df_dy = -np.sin(x) * np.sin(y) + (2*y) / 10
     return np.array([df_dx, df_dy])
 
 # Crear una malla de valores para graficar la superficie
-x_vals = np.linspace(-5, 5, 500)
-y_vals = np.linspace(-5, 5, 500)
+x_vals = np.linspace(-3, 3, 50)
+y_vals = np.linspace(-3, 3, 50)
 X, Y = np.meshgrid(x_vals, y_vals)
 Z = f(X, Y)
 
@@ -43,7 +40,7 @@ for _ in range(max_iter):
     z_traj_min.append(f(x_min, y_min))
 
 # **Gradiente Ascendente** (máximos)
-x_max, y_max = np.array([2, -2])  # Punto inicial
+x_max, y_max = np.array([-1, 0])  # Punto inicial
 for _ in range(max_iter):
     grad = grad_f(x_max, y_max)
     if np.linalg.norm(grad) < tol:
@@ -54,20 +51,29 @@ for _ in range(max_iter):
     y_traj_max.append(y_max)
     z_traj_max.append(f(x_max, y_max))
 
+
+# Convertir las listas en numpy arrays
+x_traj_min = np.array(x_traj_min)
+y_traj_min = np.array(y_traj_min)
+z_traj_min = np.array(z_traj_min)
+x_traj_max = np.array(x_traj_max)
+y_traj_max = np.array(y_traj_max)
+z_traj_max = np.array(z_traj_max)
+
 # **Configurar la figura en 3D**
 fig = plt.figure(figsize=(10, 7))
 ax = fig.add_subplot(111, projection="3d")
 
 # Graficar la superficie
-ax.plot_surface(X, Y, Z, cmap="viridis", alpha=0.7)
+ax.plot_surface(X, Y, Z, cmap="Greys", alpha=0.7)
 
 # Agregar puntos móviles para la animación
 point_min, = ax.plot([], [], [], 'ro', markersize=8, label="Mínimo (GD)")
 point_max, = ax.plot([], [], [], 'go', markersize=8, label="Máximo (GA)")
 
 # Líneas de trayectoria
-path_min, = ax.plot([], [], [], 'r-', alpha=0.6)
-path_max, = ax.plot([], [], [], 'g-', alpha=0.6)
+path_min, = ax.plot([], [], [], 'r-', linewidth=3)
+path_max, = ax.plot([], [], [], 'g-', linewidth=3)
 
 # Etiquetas y leyenda
 ax.set_xlabel("X")
@@ -80,13 +86,13 @@ ax.legend()
 def update(frame):
     if frame < len(x_traj_min):
         point_min.set_data([x_traj_min[frame]], [y_traj_min[frame]])
-        point_min.set_3d_properties(z_traj_min[frame])
+        #point_min.set_3d_properties(z_traj_min[frame])
         path_min.set_data(x_traj_min[:frame+1], y_traj_min[:frame+1])
         path_min.set_3d_properties(z_traj_min[:frame+1])
 
     if frame < len(x_traj_max):
         point_max.set_data([x_traj_max[frame]], [y_traj_max[frame]])
-        point_max.set_3d_properties(z_traj_max[frame])
+        #point_max.set_3d_properties(z_traj_max[frame])
         path_max.set_data(x_traj_max[:frame+1], y_traj_max[:frame+1])
         path_max.set_3d_properties(z_traj_max[:frame+1])
 
@@ -94,7 +100,7 @@ def update(frame):
 
 
 # **Crear la animación**
-ani = animation.FuncAnimation(fig, update, frames=max(len(x_traj_min), len(x_traj_max)), interval=2, blit=False)
+ani = animation.FuncAnimation(fig, update, frames=max(len(x_traj_min), len(x_traj_max)), interval=50, blit=False)
 
 # **Guardar la animación como GIF**
 gif_filename = "gradiente_3d.gif"

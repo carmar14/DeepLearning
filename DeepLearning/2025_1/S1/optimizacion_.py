@@ -43,7 +43,7 @@ for _ in range(max_iter):
     z_traj_min.append(f(x_min, y_min))
 
 # **Gradiente Ascendente** (máximos)
-x_max, y_max = np.array([2, -2])  # Punto inicial
+x_max, y_max = np.array([1, 0])  # Punto inicial
 for _ in range(max_iter):
     grad = grad_f(x_max, y_max)
     if np.linalg.norm(grad) < tol:

@@ -28,7 +28,7 @@ def adaline_train(X, y, learning_rate, epochs):
             error = (target - output)**2
             total_error += abs(error)
             # Actualizar los pesos
-            update = 2*learning_rate * (target - output)
+            update =learning_rate * (target - output)
             weights[1:] += update * xi
             weights[0] += update
         errors.append(total_error)

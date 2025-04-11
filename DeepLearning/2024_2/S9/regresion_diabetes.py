@@ -77,7 +77,6 @@ mape = mean_absolute_percentage_error(y_test, y_pred)
 print(f"Mean Absolute Percentage Error (MAPE): {mape * 100:.2f}%")
 
 
-
 # Graficar las predicciones vs los valores reales
 plt.figure(figsize=(10, 6))
 plt.plot(y_test, label='Valores Reales', color='blue')

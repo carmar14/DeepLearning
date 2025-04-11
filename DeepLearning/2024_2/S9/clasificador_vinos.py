@@ -65,8 +65,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 # Estandarizar las características (scaling)
 scaler = StandardScaler()
-#X_train = scaler.fit_transform(X_train)
-#X_test = scaler.transform(X_test)
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
 # One-hot encoding de las etiquetas
 y_train_ohe = to_categorical(y_train, num_classes=3)

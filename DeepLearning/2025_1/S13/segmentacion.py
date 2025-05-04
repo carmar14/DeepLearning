@@ -65,14 +65,14 @@ Los pasos para poder leer el set de datos son los siguientes:
 """
 
 # Montar google drive
-from google.colab import drive
-drive.mount('/content/gdrive',force_remount=True)
+#from google.colab import drive
+#drive.mount('/content/gdrive',force_remount=True)
 
 """A continuación descomprimimos los archivos *imgs.zip* (imágenes) y *msks.zip* (máscaras de segmentación), especificando en cada caso la ruta donde están almacenados en Google Drive:"""
 
 # Descargar a disco de la máquina virtual y descomprimir
-!unzip "/content/gdrive/MyDrive/Colab Notebooks/Segmentacion/data/imgs.zip" -d "/content/imgs"
-!unzip "/content/gdrive/MyDrive/Colab Notebooks/Segmentacion/data/msks.zip" -d "/content/msks"
+#!unzip "/content/gdrive/MyDrive/Colab Notebooks/Segmentacion/data/imgs.zip" -d "/content/imgs"
+#!unzip "/content/gdrive/MyDrive/Colab Notebooks/Segmentacion/data/msks.zip" -d "/content/msks"
 
 """Ahora leemos el archivo de meta-datos (*metadata.csv*).
 

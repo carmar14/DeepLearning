@@ -352,7 +352,7 @@ Esta función:
 Veamos cómo implementar esta función, pero antes debemos instalar Keras Tuner:
 """
 
-!pip install keras-tuner -q
+#!pip install keras-tuner -q
 
 """Ahora sí implementemos la función, fijando inicialmente la semilla del generador aleatorio para la reproducibilidad del entrenamiento:"""
 

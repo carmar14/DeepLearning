@@ -49,7 +49,7 @@ plt.legend(title='Especies')
 
 # Mostrar la gráfica
 plt.grid()
-#plt.show()
+plt.show()
 
 class_names = iris.target_names
 labels, counts = np.unique(y, return_counts=True)

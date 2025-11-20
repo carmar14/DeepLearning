@@ -97,7 +97,11 @@ d3 = signal3[delay:]
 D = np.stack((d1, d2, d3), axis=1)  # Matriz de salidas deseadas (n_samples - delay, 3)
 
 # Crear y entrenar la red ADALINE multisalida
+<<<<<<< Updated upstream:DeepLearning/2024_2/S4/adaline_multiple_output.py
 adaline = AdalineMultiOutput(input_size=delay, output_size=3, learning_rate=0.001, epochs=500)
+=======
+adaline = AdalineMultiOutput(input_size=delay, output_size=3, learning_rate=0.01, epochs=1000)
+>>>>>>> Stashed changes:DeepLearning/S4/adaline_multiple_output.py
 adaline.train(X, D)
 
 # Recuperar las señales utilizando la red ADALINE entrenada

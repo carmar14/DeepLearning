@@ -1,6 +1,7 @@
 
 %% GENERACION DE REGISTROS CELULARES CON SIMULINK
 clear; clc;
+close all
 
 model = 'modelo_data';
 load_system(model);
@@ -21,7 +22,7 @@ p.eta   = 0.1;
 
 % Escenarios de condiciones iniciales
 T0_values = linspace(0.1, 0.9, 6);
-E0_values = linspace(0.05, 0.65, 5);
+E0_values = linspace(0.05, 0.65, 20);
 
 % Tabla acumulada de todas las simulaciones
 Dataset = table();
